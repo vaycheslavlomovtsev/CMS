@@ -24,6 +24,8 @@ abstract class Controller
 
     protected $config;
 
+    protected $request;
+
     /**
      * HomeController constructor.
      * @param DI $di
@@ -33,5 +35,6 @@ abstract class Controller
         $this->di = $di;
         $this->view = $this->di->get('view');
         $this->config = $this->di->get('config');
+        $this->request = $this->di->get('request');
     }
 }
