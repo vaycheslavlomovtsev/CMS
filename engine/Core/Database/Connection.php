@@ -32,24 +32,28 @@ class Connection
         return $this;
     }
 
+
     /**
      * @param $sql
+     * @param array $values
      * @return mixed
      */
-    public function execute($sql)
+    public function execute($sql, $values = [])
     {
         $sth = $this->link->prepare($sql);
-        return $sth->execute();
+
+        return $sth->execute($values);
     }
 
     /**
      * @param $sql
+     * @param array $values
      * @return array
      */
-    public function query($sql)
+    public function query($sql, $values = [])
     {
         $sth = $this->link->prepare($sql);
-        $sth->execute();
+        $sth->execute($values);
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         if ($result === false) {
             return [];
