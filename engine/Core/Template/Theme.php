@@ -6,10 +6,10 @@ namespace Engine\Core\Template;
 class Theme
 {
     public $RULES_NAME_FILE = [
-    'header' => 'header-$s',
-    'footer' => 'footer-$s',
-    'sidebar' => 'sidebar-$s'
-];  // Разобраться как задать const, возникает ошибка
+        'header' => 'header-$s',
+        'footer' => 'footer-$s',
+        'sidebar' => 'sidebar-$s'
+    ];  // Разобраться как задать const, возникает ошибка
 
     public $url = '';
 
@@ -92,11 +92,19 @@ class Theme
     private function loadTemplateFile($nameFile, $data = [])
     {
         $templateFile = ROOT_DIR . '/content/themes/default/' . $nameFile . '.php';
+
+        if (ENV == 'Admin') {
+
+            $templateFile = ROOT_DIR . '/View/' . $nameFile . '.php';
+        }
+
         if (is_file($templateFile)) {
+
             extract($data);
             require_once $templateFile;
         } else {
-            throw new \Exception(sprintf('View file $s does not exist!', $templateFile));
+
+            throw new \Exception(sprintf('View file "$s" does not exist!', $templateFile));
         }
     }
 

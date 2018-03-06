@@ -21,7 +21,7 @@ class QueryBuilder
     public function select($fields = '*')
     {
         $this->reset();
-        $this->sql['select'] = "SELECT {$fields}";
+        $this->sql['select'] = "SELECT {$fields} ";
 
         return $this;
     }
@@ -32,7 +32,7 @@ class QueryBuilder
      */
     public function from($table)
     {
-        $this->sql['from'] = "FROM {$table}";
+        $this->sql['from'] = "FROM {$table} ";
 
         return $this;
     }
@@ -58,7 +58,7 @@ class QueryBuilder
      */
     public function orderBy($field, $order)
     {
-        $this->sql['order_by'] = "ORDER BY {$field}{$order}";
+        $this->sql['order_by'] = "ORDER BY {$field} {$order} ";
 
         return $this;
     }
@@ -77,19 +77,29 @@ class QueryBuilder
     public function update($table)
     {
         $this->reset();
+        $this->sql['update'] = "UPDATE {$table} ";
 
-        $this->sql['update'] = "UPDATE {$table}";
+        return $this;
+    }
 
-        return this;
+    public function insert($table)
+    {
+        $this->reset();
+        $this->sql['update'] = "INSERT INTO {$table} ";
+
+        return $this;
     }
 
     public function set($data = [])
     {
-        $this->sql['set'] .= " SET ";
+        $this->sql['set'] .= "SET ";
 
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                $this->sql['set'] .= "{$key} = ?, ";
+                $this->sql['set'] .= "{$key} = ?";
+                if (next($data)) {
+                    $this->sql['set'] .= ", ";
+                }
                 $this->values[] = $value;
             }
         }
@@ -101,7 +111,7 @@ class QueryBuilder
     {
         $sql = '';
 
-        if(!empty($this->sql)) {
+        if (!empty($this->sql)) {
             foreach ($this->sql as $key => $value) {
                 if ($key == 'where') {
                     $sql .= ' WHERE ';
