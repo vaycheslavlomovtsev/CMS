@@ -7,8 +7,10 @@
  */
 
 namespace Engine\Core\Database;
+
 use \PDO;
 use Engine\Core\Config\Config;
+
 class Connection
 {
     private $link;
@@ -59,5 +61,10 @@ class Connection
             return [];
         }
         return $result;
+    }
+
+    public function lastInsert()
+    {
+        return $this->link->lastInsertId();
     }
 }

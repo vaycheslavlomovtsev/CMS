@@ -33,7 +33,7 @@ trait ActiveRecord
     {
         global $di;
 
-        $this->db           = $di->get('db');
+        $this->db = $di->get('db');
         $this->queryBuilder = new QueryBuilder();
 
         if ($id) {
@@ -49,10 +49,25 @@ trait ActiveRecord
         return $this->table;
     }
 
+    public function findOne()
+    {
+        $find = $this->db->query(
+            $this->queryBuilder
+                ->select()
+                ->from($this->getTable())
+                ->where('id', $this->id)
+                ->sql(),
+            $this->queryBuilder->values
+        );
+
+        return isset($find[0]) ? $find[0] : null;
+    }
+
     /**
      *  Save User
      */
-    public function save() {
+    public function save()
+    {
         $properties = $this->getIssetProperties();
 
         try {
@@ -72,6 +87,8 @@ trait ActiveRecord
                     $this->queryBuilder->values
                 );
             }
+            return $this->link->lastInsertId();
+
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
